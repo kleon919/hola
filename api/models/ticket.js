@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
     const Ticket = sequelize.define('ticket', {
             id: {
                 type: DataTypes.INTEGER,
@@ -22,4 +23,5 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     return Ticket;
-}
+
+};

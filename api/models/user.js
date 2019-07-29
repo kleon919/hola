@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
     const User = sequelize.define('user', {
             id: {
                 type: DataTypes.INTEGER,
@@ -18,8 +19,5 @@ module.exports = (sequelize, DataTypes) => {
         User.belongsToMany(models.question, { as: 'Clients', through: 'client_dialog', foreignKey: 'userId', otherKey: 'questionId'});
     };
 
-
-
-
     return User;
-}
+};

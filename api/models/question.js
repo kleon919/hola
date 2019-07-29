@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
     const Question = sequelize.define('question', {
             id: {
                 type: DataTypes.INTEGER,
@@ -9,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             freezeTableName: true,
-        })
-
+        }
+    );
 
     Question.associate = (models) => {
         Question.belongsToMany(models.user, {
@@ -22,4 +23,5 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     return Question;
-}
+
+};
