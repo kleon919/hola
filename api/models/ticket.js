@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Ticket = sequelize.define('ticket', {
+    const Ticket = sequelize.define('ticket',
+        {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,

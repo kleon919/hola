@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const User = sequelize.define('user', {
+    const User = sequelize.define('user',
+        {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -16,8 +17,14 @@ module.exports = (sequelize, DataTypes) => {
 
     User.associate = (models) => {
         User.hasMany(models.ticket);
-        User.belongsToMany(models.question, { as: 'Clients', through: 'client_dialog', foreignKey: 'userId', otherKey: 'questionId'});
+        // User.belongsToMany(models.question, {
+        //     as: 'Clients',
+        //     through: 'client_dialog',
+        //     foreignKey: 'userId',
+        //     otherKey: 'questionId'
+        // });
     };
 
     return User;
+
 };
