@@ -27,27 +27,30 @@ app.use("/questions", require("./routes/questions")(db));
 
 
 db.sequelize.sync().then(() => {
-    // // populate user table with dummy data
-    // db.user.bulkCreate(
-    //     times(10, () => ({
-    //         firstName: "Kleon", //faker.name.firstName(),
-    //         lastName: "Tses", //faker.name.lastName()
-    //     }))
-    // );
-    // // populate ticket table with dummy data
-    // db.ticket.bulkCreate(
-    //     times(10, () => ({
-    //         title: "ela",
-    //         content: "afou", //faker.lorem.paragraph(),
-    //         type: "fhskjdfs",
-    //         userId: random(1, 10)
-    //     }))
-    // );
-    // db.question.bulkCreate(
-    //     times(10, () => ({
-    //         content: "What color?"
-    //     }))
-    // );
+    // populate user table with dummy data
+    db.user.bulkCreate(
+        times(10, () => ({
+            firstName: "Neoi", //faker.name.firstName(),
+            lastName: "Wraioi", //faker.name.lastName()
+        }))
+    );
+    // populate ticket table with dummy data
+    db.ticket.bulkCreate(
+        times(10, () => ({
+            title: "ela",
+            content: "afou", //faker.lorem.paragraph(),
+            type: "fhskjdfs",
+            userId: random(1, 10)
+        }))
+    );
+    // populate client_dialog table with dummy data
+    db.client_dialog.bulkCreate(
+        times(20, () => ({
+            answer: ['ela','pou','eisai','irtha','nai','oxi'][random(0, 5)],
+            questionId: random(1, 10),
+            userId: random(1, 10)
+        }))
+    );
 })
 
 
