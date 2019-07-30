@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
 
     ClientDialog.associate = (models) => {
         models.question.belongsToMany(models.user, {
-            as: 'Dialogs',
+            as: 'Clients',
             through: 'client_dialog',
             foreignKey: 'questionId',
             otherKey: 'userId'
         });
 
         models.user.belongsToMany(models.question, {
-            as: 'Clients',
+            as: 'Dialogs',
             through: 'client_dialog',
             foreignKey: 'userId',
             otherKey: 'questionId'

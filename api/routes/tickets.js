@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 module.exports = db => {
 
+    // Create a new ticket
     router.post("/", async (req, res) => {
         try {
             let newTicket = await db.ticket.create({
@@ -17,6 +18,7 @@ module.exports = db => {
         }
     });
 
+    // Update an existed ticket
     router.put("/:ticketId", async (req, res) => {
         try {
 

@@ -23,30 +23,31 @@ app.use(cors)
 app.use(morgan('combined'));
 
 app.use("/tickets", require("./routes/tickets")(db));
+app.use("/questions", require("./routes/questions")(db));
 
 
 db.sequelize.sync().then(() => {
-    // populate user table with dummy data
-    db.user.bulkCreate(
-        times(10, () => ({
-            firstName: "Kleon", //faker.name.firstName(),
-            lastName: "Tses", //faker.name.lastName()
-        }))
-    );
-    // populate ticket table with dummy data
-    db.ticket.bulkCreate(
-        times(10, () => ({
-            title: "ela",
-            content: "afou", //faker.lorem.paragraph(),
-            type: "fhskjdfs",
-            userId: random(1, 10)
-        }))
-    );
-    db.question.bulkCreate(
-        times(10, () => ({
-            content: "What color?"
-        }))
-    );
+    // // populate user table with dummy data
+    // db.user.bulkCreate(
+    //     times(10, () => ({
+    //         firstName: "Kleon", //faker.name.firstName(),
+    //         lastName: "Tses", //faker.name.lastName()
+    //     }))
+    // );
+    // // populate ticket table with dummy data
+    // db.ticket.bulkCreate(
+    //     times(10, () => ({
+    //         title: "ela",
+    //         content: "afou", //faker.lorem.paragraph(),
+    //         type: "fhskjdfs",
+    //         userId: random(1, 10)
+    //     }))
+    // );
+    // db.question.bulkCreate(
+    //     times(10, () => ({
+    //         content: "What color?"
+    //     }))
+    // );
 })
 
 
