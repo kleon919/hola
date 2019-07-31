@@ -22,8 +22,9 @@ app.use(bodyParser.json({limit: "500mb"}));
 app.use(cors)
 app.use(morgan('combined'));
 
-app.use("/tickets", require("./routes/tickets")(db));
-app.use("/questions", require("./routes/questions")(db));
+app.use("/users", require("./routes/users")(db))
+app.use("/tickets", require("./routes/tickets")(db))
+app.use("/questions", require("./routes/questions")(db))
 
 
 db.sequelize.sync().then(() => {
