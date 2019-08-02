@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true
             },
             firstName: DataTypes.STRING,
-            lastName: DataTypes.STRING
+            lastName: DataTypes.STRING,
+            username: DataTypes.STRING,
+            password: DataTypes.STRING
         },
         {
             freezeTableName: true,
