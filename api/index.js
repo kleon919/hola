@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const times = require("lodash.times");
 const random = require("lodash.random");
+const faker = require("faker")
 
 const db = require("./models");
 const passport = require("./middle/passport")(db);
@@ -26,38 +27,38 @@ app.post('/login',
     }
 );
 
-
 app.use("/users", require("./routes/users")(db));
 app.use("/tickets", require("./routes/tickets")(db));
 app.use("/questions", require("./routes/questions")(db));
 
 db.sequelize.sync().then(() => {
-    // populate user table with dummy data
-    // db.user.bulkCreate(
-    //     times(10, () => ({
-    //         firstName: "Neoi", //faker.name.firstName(),
-    //         lastName: "Wraioi", //faker.name.lastName(),
-    //         username: "Kleon",
-    //         password:"kleitos"
-    //     }))
-    // );
-    // // populate ticket table with dummy data
-    // db.ticket.bulkCreate(
-    //     times(10, () => ({
-    //         title: "ela",
-    //         content: "afou", //faker.lorem.paragraph(),
-    //         type: "fhskjdfs",
-    //         userId: random(1, 10)
-    //     }))
-    // );
-    // // populate client_dialog table with dummy data
+
+    db.user.bulkCreate(
+        times(10, () => ({
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            username: faker.internet.userName(),
+            password: faker.internet.password()
+        }))
+    );
+
+    db.ticket.bulkCreate(
+        times(10, () => ({
+            title: faker.lorem.word(),
+            content: faker.lorem.paragraph(),
+            type: faker.hacker.noun(),
+            userId: random(1, 10)
+        }))
+    );
+
+
     // db.client_dialog.bulkCreate(
-    //     times(20, () => ({
-    //         answer: ['ela', 'pou', 'eisai', 'irtha', 'nai', 'oxi'][random(0, 5)],
+    //     times(10, (i) => ({
+    //         answer: faker.lorem.word(),
     //         questionId: random(1, 10),
     //         userId: random(1, 10)
     //     }))
     // );
 });
 
-app.listen(9000, () => console.log('Listening..'));
+app.listen(8000, () => console.log('Listening..'));
