@@ -7,6 +7,7 @@ module.exports = db => {
         try {
             let newTicket = await db.ticket.create({
                 type: req.body.type,
+                category: req.body.category,
                 content: req.body.content
             });
 
@@ -22,9 +23,9 @@ module.exports = db => {
     router.put("/:ticketId", async (req, res) => {
         try {
 
-            let rowsUpdated = await db.ticket.update(
-                {
+            let rowsUpdated = await db.ticket.update({
                     type: req.body.type,
+                    category: req.body.category,
                     content: req.body.content
                 },
                 {where: {id: req.params.ticketId}}

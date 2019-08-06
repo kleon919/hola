@@ -30,8 +30,10 @@ module.exports = db => {
     router.post("/", async (req, res) => {
         try {
             let newUser = await db.user.create({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName
+                username: req.body.username,
+                password: req.body.password,
+                firstName: req.body.firstName || "",
+                lastName: req.body.lastName || ""
             });
 
             //res.json('User has been created with success.')

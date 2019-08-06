@@ -9,10 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             type: DataTypes.STRING,
             category: DataTypes.STRING,
-            content: {
-                type: DataTypes.TEXT,
-                // allowNull: false
-            },
+            content: DataTypes.TEXT
         },
         {
             freezeTableName: true,
