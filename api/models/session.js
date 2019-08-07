@@ -1,24 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Ticket = sequelize.define('ticket',
+    const Session = sequelize.define('session',
         {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
-            },
-            title: DataTypes.STRING,
-            content: DataTypes.TEXT
+            }
         },
         {
             freezeTableName: true,
         }
     );
 
-    Ticket.associate = (models) => {
-        Ticket.belongsTo(models.task);
+
+    Session.associate = (models) => {
+        Session.belongsTo(models.customer)
     };
 
-    return Ticket;
+    return Session;
 
 };

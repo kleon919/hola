@@ -1,23 +1,25 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Category = sequelize.define('category',
+    const Room = sequelize.define('room',
         {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            title: DataTypes.STRING,
-            subject: DataTypes.TEXT
+            room_number: DataTypes.INTEGER,
+            type: DataTypes.STRING
         },
         {
             freezeTableName: true,
-            timestamps: false
+            timestamps:false
         }
     );
 
-    // Category.associate = (models) => {};
+    Room.associate = (models) => {
+        Room.belongsTo(models.hotel)
+    };
 
-    return Category;
+    return Room;
 
 };

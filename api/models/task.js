@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Ticket = sequelize.define('ticket',
+    const Task = sequelize.define('task',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -8,17 +8,21 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true
             },
             title: DataTypes.STRING,
-            content: DataTypes.TEXT
+            body: DataTypes.TEXT,
+            close_date: DataTypes.DATE,
+            status: DataTypes.STRING,
+
         },
+
         {
             freezeTableName: true,
         }
     );
 
-    Ticket.associate = (models) => {
-        Ticket.belongsTo(models.task);
+    Task.associate = (models) => {
+        Task.belongsTo(models.hotel_staff)
     };
 
-    return Ticket;
+    return Task;
 
 };
