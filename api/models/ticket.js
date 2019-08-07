@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            type: DataTypes.STRING,
-            category: DataTypes.STRING,
+            title: DataTypes.STRING,
             content: DataTypes.TEXT
         },
         {
@@ -18,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Ticket.associate = (models) => {
         Ticket.belongsTo(models.user);
+        Ticket.belongsTo(models.category);
     };
 
     return Ticket;

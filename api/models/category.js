@@ -1,24 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Question = sequelize.define('question',
+    const Category = sequelize.define('category',
         {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            content: DataTypes.STRING
+            title: DataTypes.STRING,
+            subject: DataTypes.TEXT
         },
         {
             freezeTableName: true,
-            timestamps: false,
+            timestamps: false
         }
     );
 
-    Question.associate = (models) => {
-        Question.belongsTo(models.category);
-    };
+    // Category.associate = (models) => {};
 
-    return Question;
+    return Category;
 
 };

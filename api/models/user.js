@@ -7,15 +7,21 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true
             },
+            username: {
+                type: DataTypes.STRING,
+                unique: true
+            },
+            password: DataTypes.STRING,
             firstName: DataTypes.STRING,
-            lastName: DataTypes.STRING,
-            username: DataTypes.STRING,
-            password: DataTypes.STRING
+            lastName: DataTypes.STRING
+
         },
         {
             freezeTableName: true,
         }
     );
+
+
 
     User.associate = (models) => {
         User.hasMany(models.ticket);
