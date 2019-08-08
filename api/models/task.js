@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
             title: DataTypes.STRING,
             body: DataTypes.TEXT,
             close_date: DataTypes.DATE,
-            status: DataTypes.STRING,
-
+            status: DataTypes.STRING
         },
 
         {
             freezeTableName: true,
+            underscored: true
         }
     );
 

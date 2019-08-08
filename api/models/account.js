@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             freezeTableName: true,
+            underscored: true
         }
     );
 
