@@ -1,11 +1,13 @@
 const customers = require('./customers')
 const sessions = require('./sessions')
-const tickets = require('./tickets')
+const bookings = require('./bookings')
+const hotels = require('./hotels')
 const tasks = require('./tasks')
 
 module.exports = {
     customers,
     sessions,
-    tickets,
-    tasks
+    bookings,
+    hotels,
+    tasks,
 }

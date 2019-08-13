@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "init-db": "cd C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin && echo 'DROP DATABASE IF EXISTS `hola_db`; CREATE SCHEMA `hola_db` CHARACTER SET utf8 COLLATE utf8_general_ci' ",
     "sequelize-skeleton": "sequelize init:models && sequelize init:config",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
