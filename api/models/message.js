@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            content: DataTypes.STRING
+            content: {
+                type: DataTypes.TEXT,
+                allowNull: false
+            }
         },
         {
             freezeTableName: true,
@@ -17,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Message.associate = (models) => {
-        Message.belongsTo(models.customer)
+        Message.belongsTo(models.customer);
         Message.belongsTo(models.session)
     };
 

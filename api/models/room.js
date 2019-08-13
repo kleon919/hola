@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            room_number: DataTypes.INTEGER,
+            room_number: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
             type: DataTypes.STRING
         },
         {

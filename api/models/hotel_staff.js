@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: DataTypes.STRING,
             profile_pic: DataTypes.TEXT,
-            role: DataTypes.INTEGER,
+            role: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            }
         },
         {
             freezeTableName: true,
