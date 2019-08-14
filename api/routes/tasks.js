@@ -27,10 +27,10 @@ module.exports = db => {
     router.get("/staff/:staffId", async (req, res) => {
         try {
             res.json(await db.task.findAll({
-                where: {hotel_staff_id: req.params.staffId}
+                where: {staff_id: req.params.staffId}
                 // include: [
                 //     {
-                //         model: db.hotel_staff,
+                //         model: db.staff,
                 //         as: 'Assignee',
                 //         where: {id: req.params.staffId},
                 //         required: true

@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'room_id',
             otherKey: 'customer_id'
         });
+
+        Room_Assign.belongsTo(models.booking)
+
     };
 
     return Room_Assign;

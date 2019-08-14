@@ -37,6 +37,7 @@ app.use("/sessions", routes.sessions(db));
 app.use("/bookings", routes.bookings(db));
 app.use("/hotels", routes.hotels(db));
 app.use("/tasks", routes.tasks(db));
+app.use("/staff", routes.staff(db));
 
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
@@ -79,7 +80,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
             username: faker.internet.userName(),
             password: faker.internet.password()
         })), {individualHooks: true})
-            .then( createdInstances => db.hotel_staff.bulkCreate(times(10, (i) => ({
+            .then( createdInstances => db.staff.bulkCreate(times(10, (i) => ({
                 name: faker.name.firstName(),
                 profile_pic: faker.image.imageUrl(),
                 role: random(1, 3),

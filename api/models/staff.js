@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Hotel_Staff = sequelize.define('hotel_staff',
+    const Staff = sequelize.define('staff',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true
             },
             name: DataTypes.STRING,
+            surname: DataTypes.STRING,
             profile_pic: DataTypes.TEXT,
             role: {
                 type: DataTypes.INTEGER,
@@ -20,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    Hotel_Staff.associate = (models) => {
-        Hotel_Staff.belongsTo(models.hotel);
-        Hotel_Staff.belongsTo(models.account);
+    Staff.associate = (models) => {
+        Staff.belongsTo(models.hotel);
+        Staff.belongsTo(models.account);
     };
 
-    return Hotel_Staff;
+    return Staff;
 
 };

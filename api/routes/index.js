@@ -3,6 +3,7 @@ const sessions = require('./sessions')
 const bookings = require('./bookings')
 const hotels = require('./hotels')
 const tasks = require('./tasks')
+const staff = require('./staff')
 
 module.exports = {
     customers,
@@ -10,4 +11,5 @@ module.exports = {
     bookings,
     hotels,
     tasks,
+    staff
 }

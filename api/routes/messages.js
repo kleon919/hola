@@ -44,7 +44,7 @@ module.exports = db => {
         try {
             let message = await db.message.findAll({
                 where: {customerId: req.params.customerId}
-            })
+            });
 
             res.json(message)
 
@@ -56,14 +56,13 @@ module.exports = db => {
     // Create a new Message - Append it on a Session - Depends on a Customer
     router.post("/", async (req, res) => {
         try {
-            let message = await db.user.create({
+            let message = await db.message.create({
                 content: req.body.content,
                 customerId: req.body.customerId,
                 sessionId: req.body.sessionId
             });
 
-            //res.json('Customer has been created with success.')
-            res.json(newCustomer)
+            res.json(message)
 
         } catch (err) {
             res.json(err.message)
