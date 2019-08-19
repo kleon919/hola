@@ -20,24 +20,13 @@ app.use(require('./middle/cors'));
 
 app.get('/schema', vizql(db.sequelize).pageRoute);
 
-app.post('/login',
-    passport.authenticate('local', {
-        successRedirect: '/users',
-        failureRedirect: '/login',
-        failureFlash: false
-    }),
-    (req, res) => {
-        console.log(1)
-    }
-);
-
-
 app.use("/customers", routes.customers(db));
 app.use("/sessions", routes.sessions(db));
 app.use("/bookings", routes.bookings(db));
 app.use("/hotels", routes.hotels(db));
 app.use("/tasks", routes.tasks(db));
 app.use("/staff", routes.staff(db));
+app.use("/auth", routes.auth(passport));
 
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})

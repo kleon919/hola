@@ -4,6 +4,7 @@ const bookings = require('./bookings')
 const hotels = require('./hotels')
 const tasks = require('./tasks')
 const staff = require('./staff')
+const auth = require('./auth')
 
 module.exports = {
     customers,
@@ -11,5 +12,6 @@ module.exports = {
     bookings,
     hotels,
     tasks,
-    staff
+    staff,
+    auth
 }

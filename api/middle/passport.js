@@ -3,35 +3,41 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const passportLocal = db => {
 
-    passport.use(new LocalStrategy(
-        (username, password, done) =>
-            db.user.findOne({where: {username: username}})
-                .then(user => {
-                    if (!user) {
-                        return done(null, false, {message: 'Incorrect username.'});
-                    }
-                    if (user.password !== password) {
-                        return done(null, false, {message: 'Incorrect password.'});
-                    }
-                    return done(null, user);
-                })
-                .catch(err => {
-                    return done(err)
-                })
+    passport.use('signup', new LocalStrategy({
+            usernameField: 'username',
+            passwordField: 'password'
+        }, async (username, password, done) => {
+            try {
+                const account = await db.account.create({username, password})
+                return done(null, account);
+            } catch (error) {
+                return done(error);
+            }
+        }
     ));
 
-    passport.serializeUser(function(user, done) {
-        done(null, user);
-    });
+    passport.use('login', new LocalStrategy({
+            usernameField: 'username',
+            passwordField: 'password'
+        }, async (username, password, done) => {
+            try {
+                const account = await db.account.findOne({where: {username: username}} /*{username}*/)
+                if (!account) {
+                    return done(null, false, {message: 'Incorrect username.'});
+                }
+                const validate = await account.isValidPassword(password);
+                if (!validate) {
+                    return done(null, false, {message: 'Incorrect password.'});
+                }
+                return done(null, account);
+            } catch (error) {
+                return done(error);
+            }
+        }
+    ));
 
-    passport.deserializeUser(function(user, done) {
-        done(null, user);
-    });
+    return passport;
 
-    return passport
-
-}
-
+};
 
 module.exports = passportLocal;
-

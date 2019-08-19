@@ -1,3 +1,11 @@
+const bcrypt = require('bcrypt')
+
+const hashPassword = async (account, options) => {
+    if (!account.changed('password')) return;
+    return account.setDataValue('password', await bcrypt.hash(account.password, 10));
+}
+
+
 module.exports = (sequelize, DataTypes) => {
 
     const Account = sequelize.define('account',
@@ -9,19 +17,35 @@ module.exports = (sequelize, DataTypes) => {
             },
             username: {
                 type: DataTypes.STRING,
+                required: true,
                 unique: true,
                 allowNull: false
             },
-            password: DataTypes.STRING,
+            password: {
+                type: DataTypes.STRING,
+                required: true
+            }
+
         },
         {
             freezeTableName: true,
-            underscored: true
+            underscored: true,
+            hooks: {
+                beforeCreate: hashPassword,
+                beforeUpdate: hashPassword
+            }
         }
     );
 
+    // Account.myFunc  -> Class method
+    // Account.prototype.myFunc  -> Instance method
 
-    Account.associate = (models) => {};
+    Account.prototype.isValidPassword = async function (password) {
+        return await bcrypt.compare(password, this.password);
+    };
+
+    Account.associate = (models) => {
+    };
 
     return Account;
 
