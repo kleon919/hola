@@ -10,20 +10,17 @@ module.exports = passport => {
     router.post('/login', async (req, res, next) =>
         passport.authenticate('login', async (err, account, info) => {
             try {
-                if (err || !account) {
-                    const error = new Error(info.message || "Unknown Error")
-                    return next(error);
-                }
-                req.login(account, {session: false}, async (error) => {
-                    if (error) return next(error)
+                if (err || !account) return next(new Error(info.message || "Unknown Error"));
+
+                req.login(account, {session: false}, async (err) => {
+                    if (err) return next(err);
+
                     const body = {_id: account.id, username: account.username};
-
                     const token = jwt.sign(body, 'top_secret');
-
                     return res.json({token});
                 });
-            } catch (error) {
-                return next(error);
+            } catch (err) {
+                return next(err);
             }
         })(req, res, next)
     );

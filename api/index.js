@@ -25,7 +25,7 @@ app.use("/sessions", routes.sessions(db));
 app.use("/bookings", routes.bookings(db));
 app.use("/hotels", routes.hotels(db));
 app.use("/tasks", routes.tasks(db));
-app.use("/staff", routes.staff(db));
+app.use("/staff", passport.authenticate('jwt', {session: false}), routes.staff(db));
 app.use("/auth", routes.auth(passport));
 
 
@@ -41,8 +41,8 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
         })))
             .then(() => db.room.bulkCreate(times(20, () => ({
                 room_number: faker.random.number(),
-                type: ['floor','top','middle'][(random(0,2))],
-                hotelId: random(1,5)
+                type: ['floor', 'top', 'middle'][(random(0, 2))],
+                hotelId: random(1, 5)
             }))));
 
         db.account.bulkCreate(times(10, () => ({
@@ -60,21 +60,22 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
             .then(createdInstances => db.booking.bulkCreate(times(10, (i) => ({
                 date_from: faker.date.recent(),
                 date_to: faker.date.future(),
-                type_of_trip: ['work', 'holiday', 'educational'][random(0,2)],
+                type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
                 customerId: createdInstances[i].dataValues.id,
-                hotelId: random(1,5)
+                hotelId: random(1, 5)
             }))));
 
         db.account.bulkCreate(times(10, () => ({
             username: faker.internet.userName(),
             password: faker.internet.password()
         })), {individualHooks: true})
-            .then( createdInstances => db.staff.bulkCreate(times(10, (i) => ({
+            .then(createdInstances => db.staff.bulkCreate(times(10, (i) => ({
                 name: faker.name.firstName(),
+                surname: faker.name.lastName(),
                 profile_pic: faker.image.imageUrl(),
                 role: random(1, 3),
                 accountId: createdInstances[i].dataValues.id,
-                hotelId: random(1,5)
+                hotelId: random(1, 5)
             })), {individualHooks: true}))
             .then(createdInstances => db.task.bulkCreate(times(10, (i) => ({
                 title: faker.lorem.word(),
