@@ -16,7 +16,7 @@ module.exports = passport => {
                     if (err) return next(err);
 
                     const body = {_id: account.id, username: account.username};
-                    const token = jwt.sign(body, 'top_secret');
+                    const token = jwt.sign(body, 'top_secret', {expiresIn: '1h'});
                     return res.json({token});
                 });
             } catch (err) {

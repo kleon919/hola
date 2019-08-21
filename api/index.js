@@ -7,7 +7,7 @@ const random = require("lodash.random");
 const faker = require("faker");
 
 const db = require("./models");
-const passport = require("./middle/passport")(db);
+const passport = require("./middle/passport")
 
 const routes = require('./routes');
 const app = express();
@@ -26,7 +26,7 @@ app.use("/bookings", routes.bookings(db));
 app.use("/hotels", routes.hotels(db));
 app.use("/tasks", routes.tasks(db));
 app.use("/staff", passport.authenticate('jwt', {session: false}), routes.staff(db));
-app.use("/auth", routes.auth(passport));
+app.use("/", routes.auth(passport));
 
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
