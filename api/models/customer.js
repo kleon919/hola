@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
     Customer.associate = (models) => {
-        Customer.belongsTo(models.account);
+        Customer.belongsTo(models.account, {foreignKey: {unique: true}});
     };
 
     return Customer;
