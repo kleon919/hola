@@ -7,27 +7,23 @@ const random = require("lodash.random");
 const faker = require("faker");
 
 const db = require("./models");
-const passport = require("./middle/passport")
+const {passport, cors} = require('./middle')
 
-const routes = require('./routes');
+const {auth} = require('./routes');
+const secureRoutes = require('./routes/api');
+
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true, limit: "500mb"}));
 app.use(bodyParser.json({limit: "500mb"}));
 app.use(passport.initialize());
 app.use(morgan('combined'));
-app.use(require('./middle/cors'));
+app.use(cors);
 
 app.get('/schema', vizql(db.sequelize).pageRoute);
 
-app.use("/customers", routes.customers(db));
-app.use("/sessions", routes.sessions(db));
-app.use("/bookings", routes.bookings(db));
-app.use("/hotels", routes.hotels(db));
-app.use("/tasks", routes.tasks(db));
-app.use("/staff", passport.authenticate('jwt', {session: false}), routes.staff(db));
-app.use("/", routes.auth(passport));
-
+app.use('/', auth(passport));
+app.use('/api', passport.authenticate('jwt', {session: false}), secureRoutes(db));
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
     .then(() => db.sequelize.query('CREATE SCHEMA IF NOT EXISTS `hola_db`;', {raw: true}))

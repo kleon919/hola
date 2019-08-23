@@ -5,6 +5,8 @@ module.exports = db => {
     // Fetch all Staff
     router.get("/", async (req, res) => {
         try {
+            const { _id } = req.user;
+            console.log(_id)
             res.json(await db.staff.findAll())
         } catch (err) {
             res.json(err.message)

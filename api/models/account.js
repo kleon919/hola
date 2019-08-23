@@ -24,8 +24,11 @@ module.exports = (sequelize, DataTypes) => {
             password: {
                 type: DataTypes.STRING,
                 required: true
+            },
+            salt: {
+                type: DataTypes.STRING,
+                required: true
             }
-
         },
         {
             freezeTableName: true,
