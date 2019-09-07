@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             content: {
                 type: DataTypes.TEXT,
                 allowNull: false
+            },
+            actor: {
+                type: DataTypes.STRING,
+                allowNull: false
             }
         },
         {
@@ -20,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Message.associate = (models) => {
-        Message.belongsTo(models.customer);
         Message.belongsTo(models.session)
     };
 
