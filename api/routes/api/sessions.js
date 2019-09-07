@@ -11,22 +11,23 @@ module.exports = db => {
         }
     });
 
-    // Fetch a specific Session
-    router.get("/:sessionId", async (req, res) => {
+    // Fetch all Sessions and messages of a Customer
+    router.get("/customer", async (req, res) => {
         try {
             res.json(await db.session.findAll({
-                where: {id: req.params.sessionId}
+                include: [{model: db.message}],
+                where: {customerId: req.user.customerId}
             }))
         } catch (err) {
             res.json(err.message)
         }
     });
 
-    // Fetch all Sessions of a Customer
-    router.get("/customers/:customerId", async (req, res) => {
+    // Fetch a specific Session
+    router.get("/:sessionId", async (req, res) => {
         try {
             res.json(await db.session.findAll({
-                where: {customerId: req.params.customerId}
+                where: {id: req.params.sessionId}
             }))
         } catch (err) {
             res.json(err.message)

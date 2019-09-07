@@ -1,20 +1,14 @@
 const router = require("express").Router();
 
-const customers = require('./customers');
-const sessions = require('./sessions');
-const bookings = require('./bookings');
-const hotels = require('./hotels');
-const tasks = require('./tasks');
-const staff = require('./staff');
-
 module.exports = db => {
 
-    router.use('/customers', customers(db));
-    router.use('/sessions', sessions(db));
-    router.use('/bookings', bookings(db));
-    router.use('/hotels', hotels(db));
-    router.use('/tasks', tasks(db));
-    router.use('/staff', staff(db));
+    router.use('/customers', require('./customers')(db));
+    router.use('/sessions', require('./sessions')(db));
+    router.use('/messages', require('./messages')(db));
+    router.use('/bookings', require('./bookings')(db));
+    router.use('/hotels', require('./hotels')(db));
+    router.use('/tasks', require('./tasks')(db));
+    router.use('/staff', require('./staff')(db));
 
     return router;
 

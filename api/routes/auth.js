@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
-const {staff, customer} = require('../models');
+const {staff, customer, session} = require('../models');
 
 const create = async (req, res, next) => {
     try {
@@ -29,13 +29,21 @@ module.exports = passport => {
                 req.login(account, {session: false}, async (err) => {
                     if (err) return next(err);
 
-                    const person = (true)
+                    const person = (true) //todo  customer || staff
                         ? await customer.findOne({where: {accountId: account.id}})
                         : await staff.findOne({where: {accountId: account.id}})
 
-                    const body = {_id: account.id, username: account.username, person};
+                    // todo If customer create session Else proceed
+                    const discussion = (true) //todo  customer || staff
+                        ? await session.create({customerId: person.id})
+                        : true;
+
+                    const body = {_id: account.id, customerId: person.id, sessionId: discussion.id};
                     const token = jwt.sign(body, 'top_secret', {expiresIn: '1h'});
-                    return res.json({token});
+
+                    return (true) //todo  customer || staff
+                        ? res.json({token, username: account.username, ...person.dataValues}) // todo
+                        : res.redirect('/ws-login')
                 });
             } catch (err) {
                 return next(err);
