@@ -15,7 +15,10 @@ module.exports = db => {
     router.get("/customer", async (req, res) => {
         try {
             res.json(await db.session.findAll({
-                include: [{model: db.message}],
+                include: [{
+                    model: db.message,
+                    attributes: ['content', 'actor', 'createdAt'],
+                }],
                 where: {customerId: req.user.customerId}
             }))
         } catch (err) {
