@@ -28,10 +28,6 @@ app.use((req, res, next) => {
     console.log('http & ws');
     return next();
 });
-app.use( (err, req, res, next) => {
-    console.error(err.stack)
-    res.status(500).send('Something broke!')
-})
 
 app.get('/schema', vizql(db.sequelize).pageRoute);
 

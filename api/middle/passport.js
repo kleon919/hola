@@ -26,9 +26,9 @@ passport.use('login', new LocalStrategy({
     }, async (username, password, done) => {
         try {
             const account = await Account.findOne({where: {username: username}} /*{username}*/)
-            if (!account) return done(null, false, {message: 'Incorrect username.'});
+            if (!account) return done(null, false, {message: 'Incorrect credentials.'}); // Invalid username
             const validate = await account.isValidPassword(password);
-            if (!validate) return done(null, false, {message: 'Incorrect password.'});
+            if (!validate) return done(null, false, {message: 'Incorrect credentials.'}); // Invalid password
             return done(null, account);
         } catch (err) {
             return done(err);

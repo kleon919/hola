@@ -24,7 +24,8 @@ module.exports = passport => {
     router.post('/login', async (req, res, next) =>
         passport.authenticate('login', async (err, account, info) => {
             try {
-                if (err || !account) return next(new Error(info.message || "Unknown Error"));
+                if (err) return next(err);
+                if (!account) return next(new Error(info.message));
 
                 req.login(account, {session: false}, async (err) => {
                     if (err) return next(err);
@@ -50,6 +51,11 @@ module.exports = passport => {
             }
         })(req, res, next)
     );
+
+    router.use((err, req, res, next) => {
+        console.error(err.stack) // DEBUG
+        res.status(500).send(err.message || "Unknown Error")
+    })
 
     return router;
 
