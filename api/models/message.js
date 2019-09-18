@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
             actor: {
                 type: DataTypes.STRING,
                 allowNull: false
+            },
+            createdAt: {
+                type: DataTypes.DATE(6)
+            },
+            updatedAt: {
+                type: DataTypes.DATE(6)
             }
         },
         {
