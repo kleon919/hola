@@ -55,7 +55,7 @@ module.exports = passport => {
     router.use((err, req, res, next) => {
         console.error(err.stack) // DEBUG
         res.status(500).send(err.message || "Unknown Error")
-    })
+    });
 
     return router;
 

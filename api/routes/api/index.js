@@ -1,6 +1,9 @@
 const router = require("express").Router();
+const passport = require('../../middle/passport');
 
 module.exports = db => {
+
+    router.use(passport.authenticate('jwt', {session: false}));
 
     router.use('/customers', require('./customers')(db));
     router.use('/sessions', require('./sessions')(db));

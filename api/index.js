@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', auth(passport));
-app.use('/api', passport.authenticate('jwt', {session: false}), secureRoutes(db));
+app.use('/api', secureRoutes(db));
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
     .then(() => db.sequelize.query('CREATE SCHEMA IF NOT EXISTS `hola_db`;', {raw: true}))
