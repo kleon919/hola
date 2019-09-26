@@ -26,10 +26,10 @@ module.exports = db => {
         }
     });
 
-    // Create a new Customer
+    // Create a new Customer // todo UNUSED
     router.post("/", async (req, res) => {
         try {
-            let newCustomer = await db.user.create({
+            let newCustomer = await db.customer.create({
                 name: req.body.name,
                 surname: req.body.surname,
                 profile_pic: req.body.profile_pic,
@@ -46,10 +46,10 @@ module.exports = db => {
     });
 
     // Update an existed Customer
-    router.put("/:userId", async (req, res) => {
+    router.put("/", async (req, res) => {
         try {
 
-            let rowsUpdated = await db.user.update(
+            await db.customer.update(
                 {
                     name: req.body.name,
                     surname: req.body.surname,
@@ -57,11 +57,10 @@ module.exports = db => {
                     genre: req.body.genre,
                     country: req.body.country,
                 },
-                {where: {id: req.params.customerId}}
+                {where: {id: req.user.customerId}}  // Retrieve customerId from token
             );
 
-            // res.json('Customer has been updated with success.')
-            res.json(rowsUpdated)
+            res.json('Customer ' + req.user.customerId + ' has been updated with success.')
 
         } catch (err) {
             res.json(err.message)

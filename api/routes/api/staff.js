@@ -5,7 +5,7 @@ module.exports = db => {
     // Fetch all Staff
     router.get("/", async (req, res) => {
         try {
-            const { _id } = req.user;
+            const {_id} = req.user;
             console.log(_id)
             res.json(await db.staff.findAll())
         } catch (err) {
@@ -27,7 +27,7 @@ module.exports = db => {
         }
     });
 
-    // Create a new Staff member
+    // Create a new Staff member // todo UNUSED
     router.post("/", async (req, res) => {
         try {
             let newStaffMember = await db.staff.create({
@@ -48,22 +48,20 @@ module.exports = db => {
     });
 
     // Update an existed Staff member
-    router.put("/:staffId", async (req, res) => {
+    router.put("/", async (req, res) => {
         try {
-            let rowsUpdated = await db.user.update(
+            await db.staff.update(
                 {
                     name: req.body.name,
                     surname: req.body.surname,
                     profile_pic: req.body.profile_pic,
-                    role: req.body.role,
+                    role: req.body.role,    // todo: Is able to get chagned
                     hotelId: req.body.hotelId,
-                    accountId: req.body.accountId,
                 },
-                {where: {id: req.params.staffId}}
+                {where: {id: req.user.staffId}}
             );
 
-            // res.json('Staff member has been updated with success.')
-            res.json(rowsUpdated)
+            res.json('Staff member ' + req.user.staffId + ' has been updated with success.')
 
         } catch (err) {
             res.json(err.message)

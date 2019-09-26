@@ -2,17 +2,39 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
 const {staff, customer, session} = require('../models');
+const db = require('../models');
+
 
 const create = async (req, res, next) => {
     try {
-        let newOne = (true)
-            ? await customer.create(req.body)
-            : await staff.create(req.body)
-        newOne.setAccount(req.user);
+        // todo include the creation of the Account that performed in previous middleware into the transaction
+        var t = await db.sequelize.transaction();
+
+        const isStaff = req.query.type === 'staff';
+
+        let newOne = (isStaff)
+            ? await staff.create(req.body, {transaction: t})
+            : await customer.create(req.body, {transaction: t})
+        await newOne.setAccount(req.user, {transaction: t})
+        t.commit()
         next()
     } catch (err) {
+        t.rollback()
         next(err)
     }
+};
+
+const fetchStaff = async account => {
+    const person = await staff.findOne({where: {accountId: account.id}});
+    let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
+    return {person, body}
+};
+
+const fetchCustomer = async account => {
+    const person = await customer.findOne({where: {accountId: account.id}})
+    const discussion = await session.create({customerId: person.id});// todo: If customer create session Else proceed
+    let body = {_id: account.id, customerId: person.id, sessionId: discussion.id}
+    return {person, body}
 };
 
 module.exports = passport => {
@@ -27,24 +49,19 @@ module.exports = passport => {
                 if (err) return next(err);
                 if (!account) return next(new Error(info.message));
 
+                const isStaff = req.query.type === 'staff';
+
                 req.login(account, {session: false}, async (err) => {
                     if (err) return next(err);
 
-                    const person = (true) //todo  customer || staff
-                        ? await customer.findOne({where: {accountId: account.id}})
-                        : await staff.findOne({where: {accountId: account.id}})
+                    const {person, body} = (isStaff)
+                        ? await fetchStaff(account)
+                        : await fetchCustomer(account)
 
-                    // todo If customer create session Else proceed
-                    const discussion = (true) //todo  customer || staff
-                        ? await session.create({customerId: person.id})
-                        : true;
-
-                    const body = {_id: account.id, customerId: person.id, sessionId: discussion.id};
                     const token = jwt.sign(body, 'top_secret', {expiresIn: '1h'});
 
-                    return (true) //todo  customer || staff
-                        ? res.json({token, username: account.username, ...person.dataValues}) // todo
-                        : res.redirect('/ws-login')
+                    res.json({token, username: account.username, ...person.dataValues}) // todo
+
                 });
             } catch (err) {
                 return next(err);

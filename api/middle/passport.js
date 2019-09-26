@@ -14,8 +14,8 @@ passport.use('signup', new LocalStrategy({
         try {
             const account = await Account.create({username, password})
             return done(null, account);
-        } catch (error) {
-            return done(error);
+        } catch (err) {
+            return done(err);
         }
     }
 ));

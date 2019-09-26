@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Staff.associate = (models) => {
         Staff.belongsTo(models.hotel);
-        Staff.belongsTo(models.account, {foreignKey: {unique: true, allowNull: false}});
+        Staff.belongsTo(models.account, {foreignKey: {unique: true}});
     };
 
     return Staff;

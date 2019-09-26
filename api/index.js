@@ -15,7 +15,7 @@ const io = require('socket.io')(http);
 
 const {auth} = require('./routes');
 const secureRoutes = require('./routes/api');
-require('./routes/ws')(io)
+require('./routes/ws')(io);
 
 app.use(bodyParser.urlencoded({extended: true, limit: "500mb"}));
 app.use(bodyParser.json({limit: "500mb"}));
@@ -97,13 +97,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
     })
     .catch(err => console.log(err));
 
-http.listen(8000, () => console.log('Listening..'))
-
-
-
-
-
-
+http.listen(8000, () => console.log('Listening..'));
 
 
 
