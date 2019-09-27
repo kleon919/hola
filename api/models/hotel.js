@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    // Hotel.associate = (models) => {};
+    Hotel.associate = (models) => {
+        Hotel.hasMany(models.staff)
+    };
 
     return Hotel;
 

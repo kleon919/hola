@@ -13,6 +13,29 @@ module.exports = db => {
         }
     });
 
+    router.get("/hotel", async (req, res) => {
+        try {
+
+            let net = await db.hotel.findOne({
+                include: [{
+                    model: db.staff
+                    // attributes: ['']
+                }],
+                where: {id: req.user.hotelId}
+            })
+
+
+            // let staff = await db.staff.findAll({
+            //     where: {hotelId: req.params.hotelId}
+            // })
+
+            res.json(net)
+
+        } catch (err) {
+            res.json(err.message)
+        }
+    });
+
     // Fetch a specific Staff member
     router.get("/:staffId", async (req, res) => {
         try {
@@ -55,7 +78,7 @@ module.exports = db => {
                     name: req.body.name,
                     surname: req.body.surname,
                     profile_pic: req.body.profile_pic,
-                    role: req.body.role,    // todo: Is able to get chagned
+                    role: req.body.role,    // todo: Is able to get changed
                     hotelId: req.body.hotelId,
                 },
                 {where: {id: req.user.staffId}}
@@ -69,19 +92,6 @@ module.exports = db => {
     });
 
     // Fetch all Staff members of a specific Hotel
-    router.get("/hotel/:hotelId", async (req, res) => {
-        try {
-            let staff = await db.staff.findAll({
-                where: {hotelId: req.params.hotelId}
-            })
-
-            res.json(staff)
-
-        } catch (err) {
-            res.json(err.message)
-        }
-    });
-
     return router;
 
 }
