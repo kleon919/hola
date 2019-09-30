@@ -1,4 +1,5 @@
 const router = require("express").Router();
+let updateEmitter = require('../../core/events/customerUpdateEmitter')
 
 module.exports = db => {
 
@@ -14,6 +15,13 @@ module.exports = db => {
     // Create a new Message - Append it on a Session
     router.post("/", async (req, res) => {
         try {
+
+            if (req.body.questionKey) {
+                updateEmitter.emit('event', {
+                    customerId: req.user.customerId,
+                    [req.body.questionKey]: req.body.content
+                });
+            }
 
             await db.message.create({
                 content: req.body.content,
@@ -81,7 +89,6 @@ module.exports = db => {
             res.json(err.message)
         }
     });
-
 
 
     return router;

@@ -25,13 +25,17 @@ app.use(cors);
 
 app.get('/schema', vizql(db.sequelize).pageRoute);
 
+app.use('/', auth(passport));
+app.use('/api', secureRoutes(db));
+
 app.use((req, res, next) => {
     console.log('http & ws');
     return next();
 });
 
-app.use('/', auth(passport));
-app.use('/api', secureRoutes(db));
+app.use((err, req, res, next) => {
+    console.log('General ==> ' + err);
+});
 
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
     .then(() => db.sequelize.query('CREATE SCHEMA IF NOT EXISTS `hola_db`;', {raw: true}))
@@ -44,7 +48,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
             address: faker.address.streetAddress(),
         })))
             .then(() => db.room.bulkCreate(times(20, () => ({
-                room_number: random(1,500),
+                room_number: random(1, 500),
                 type: ['floor', 'top', 'middle'][(random(0, 2))],
                 hotelId: random(1, 10)
             }))));
@@ -94,13 +98,20 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
                 taskId: createdInstances[i].dataValues.id
             }))));
 
+        db.question.bulkCreate([
+            {key: 'age', phrase: 'What is your age?'},
+            {key: 'age', phrase: 'How old are you?'},
+            {key: 'country', phrase: 'Where are you from?'},
+            {key: 'country', phrase: 'What is your age?'},
+            {key: 'genre', phrase: 'What is your gender?'},
+            {key: 'genre', phrase: 'How do you currently describe your gender identity?'}
+        ], {individualHooks: true})
+
+
     })
     .catch(err => console.log(err));
 
 http.listen(8000, () => console.log('Listening..'));
-
-
-
 
 
 // app.ws('/ws-login', (ws, req) => {
@@ -135,8 +146,5 @@ http.listen(8000, () => console.log('Listening..'));
 //
 // });
 //
-// myEmitter.on('event', () => {
-//     console.log('an event occurred!');
-//     clients.map(c => c.send("pros Olousss"))
-// });
+
 
