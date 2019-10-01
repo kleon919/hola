@@ -12,6 +12,7 @@ module.exports = db => {
     router.use('/hotels', require('./hotels')(db));
     router.use('/tasks', require('./tasks')(db));
     router.use('/staff', require('./staff')(db));
+    router.use('/questions', require('./questions')(db));
 
     return router;
 

@@ -16,8 +16,14 @@ module.exports = db => {
     router.post("/", async (req, res) => {
         try {
 
+            /**
+             * If there is a 'questionKey' attribute in body,
+             * the event updates the matching customer's field, using the value of the attribute,
+             * with the input message
+             * */
+
             if (req.body.questionKey) {
-                updateEmitter.emit('event', {
+                updateEmitter.emit('customer:update', {
                     customerId: req.user.customerId,
                     [req.body.questionKey]: req.body.content
                 });
