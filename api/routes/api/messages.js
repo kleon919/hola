@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const {analyze} = require('../../core/nlp');
 let updateEmitter = require('../../core/events/customerUpdateEmitter')
 
 module.exports = db => {
@@ -29,22 +30,25 @@ module.exports = db => {
                 });
             }
 
+            const outcome = await analyze(req.body.content);
+
+            // todo Answer!
+            let answer = outcome.answer || req.body.content + " answered";
+
+            res.json(answer)
+
             await db.message.create({
                 content: req.body.content,
                 actor: "client",
+                score: outcome.sentiment.score,
                 sessionId: req.user.sessionId
             });
 
-            // todo Answer!
-            let answer = req.body.content + " answered";
-
-            let message = await db.message.create({
+            await db.message.create({
                 content: answer,
                 actor: "hola",
                 sessionId: req.user.sessionId
-            })
-
-            res.json(message)
+            });
 
         } catch (err) {
             res.json(err.message)

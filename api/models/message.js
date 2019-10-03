@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false
             },
+            score: {
+                type: DataTypes.INTEGER,
+                defaultValue: null
+            },
             createdAt: {
                 type: DataTypes.DATE(6)
             },
