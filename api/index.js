@@ -3,7 +3,6 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const vizql = require('vizql');
 const {times, random} = require("lodash");
-// const random = require("lodash.random");
 const faker = require("faker");
 
 const db = require("./models");
@@ -25,9 +24,12 @@ app.use(passport.initialize());
 app.use(morgan('combined'));
 app.use(cors);
 
-app.get('/schema', vizql(db.sequelize).pageRoute);
+app.use((req, res, next) => {
+    console.log('http & ws');
+    next()
+});
 
-app.use((req, res, next) => console.log('http & ws') && next());
+app.get('/schema', vizql(db.sequelize).pageRoute);
 
 app.use('/', auth(passport));
 app.use('/api', secureRoutes(db));

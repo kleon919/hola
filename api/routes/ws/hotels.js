@@ -1,6 +1,11 @@
-module.exports = io =>
+const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 
-    io
+module.exports = io => {
+
+    hotelNotifyEmitter.on('hotel.notify',  ob =>
+        io.of('hotels').emit('broadcast', {anama: "roukou", sikolo: ob}));
+
+    return io
         .of('hotels')
         .use(require('socketio-jwt').authorize({
             secret: 'top_secret',
@@ -24,3 +29,8 @@ module.exports = io =>
 
             })
         });
+
+}
+
+
+

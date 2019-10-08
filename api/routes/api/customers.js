@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 
 module.exports = db => {
 
@@ -59,6 +60,8 @@ module.exports = db => {
                 },
                 {where: {id: req.user.customerId}}  // Retrieve customerId from token
             );
+
+            hotelNotifyEmitter.emit('hotel.notify', {user:req.user})
 
             res.json('Customer ' + req.user.customerId + ' has been updated with success.')
 
