@@ -3,7 +3,10 @@ const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 module.exports = io => {
 
     hotelNotifyEmitter.on('hotel.notify',  ob =>
-        io.of('hotels').emit('broadcast', {anama: "roukou", sikolo: ob}));
+        io
+            .of('hotels')
+            .to(ob.hotelId) // room per hotel
+            .emit('broadcast', ob));
 
     return io
         .of('hotels')
@@ -12,7 +15,7 @@ module.exports = io => {
             handshake: true
         }))
         .on('connection', socket => {
-            let currentRoom = socket.handshake.query.token;
+            let currentRoom = socket.decoded_token.hotelId;
 
             socket.join(currentRoom);
             socket.on('message', msg => {

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 
 module.exports = db => {
 
@@ -32,9 +33,11 @@ module.exports = db => {
                 date_from: req.body.dateFrom,
                 date_to: req.body.dateTo,
                 type_of_trip: req.body.typeOfTrip,
-                customerId: req.body.customerId,
+                customerId: req.user.customerId,  // todo customerId is existed into req.user?
                 hotelId: req.body.hotelId,
             });
+
+            hotelNotifyEmitter.emit('hotel.notify', {user:req.user, ...req.body})
 
             //res.json('Booking has been created with success.')
             res.json(newBooking)

@@ -25,6 +25,8 @@ const create = async (req, res, next) => {
 };
 
 const fetchStaff = async account => {
+
+    // todo: Validation of Input needed. Required fields
     const person = await staff.findOne({where: {accountId: account.id}});
     let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
     return {person, body}
