@@ -24,6 +24,8 @@ app.use(passport.initialize());
 app.use(morgan('combined'));
 app.use(cors);
 
+app.use('/doc', require('./doc/swagger-doc'));
+
 app.use((req, res, next) => {
     console.log('http & ws');
     next()

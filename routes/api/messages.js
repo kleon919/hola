@@ -69,7 +69,28 @@ module.exports = db => {
         }
     });
 
-    // Fetch a all Messages for a specific Customer
+    /**
+     * @swagger
+     * /api/messages/customer:
+     *   get:
+     *     summary: Fetch all Messages of a specific Customer
+     *     description: Returns a list of all the messages received by a specific customer, divided into sessions and sorted on date.
+     *     tags:
+     *       - Messages
+     *     security:
+     *       - JWT: []
+     *     responses:
+     *       200:
+     *         description: List of messages
+     *         schema:
+     *           type: object
+     *           properties:
+     *             animals:
+     *               type: array
+     *               description: all the animals
+     *               items:
+     *                 type: string
+     */
     router.get("/customer", async (req, res) => {
         try {
             let messages = await db.message.findAll({
