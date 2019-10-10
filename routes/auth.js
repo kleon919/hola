@@ -41,6 +41,43 @@ const fetchCustomer = async account => {
 
 module.exports = passport => {
 
+    /**
+     * @swagger
+     *
+     *
+     * /signup:
+     *   post:
+     *     summary: Sign Up
+     *     description: Create an account for both Customer or Staff member.
+     *     tags:
+     *       - Auth
+     *     parameters:
+     *       - in: query
+     *         name: type
+     *         schema:
+     *          type: string
+     *          enum:
+     *           - customer
+     *           - staff
+     *         required: true
+     *         description: Indicates the type of account would be created
+     *     requestBody:
+     *         description: Description of current body schema
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               oneOf:
+     *                  - $ref: '#/definitions/CustomerAccount'
+     *                  - $ref: '#/definitions/StaffAccount'
+     *     responses:
+     *       200:
+     *         description: Success
+     *         schema:
+     *           type: string
+     *
+     *
+     */
     router.post('/signup', passport.authenticate('signup', {session: false}), create, async (req, res) => {
         res.json(req.user.username + ' created')
     });
