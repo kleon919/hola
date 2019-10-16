@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Task.associate = (models) => {
         Task.belongsTo(models.staff)
+        Task.belongsTo(models.hotel)
     };
 
     return Task;

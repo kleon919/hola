@@ -6,7 +6,7 @@ module.exports = db => {
     // Fetch all Bookings
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.booking.findAll())
+            res.json(await db.booking.findAll({where: {hotelId: req.user.hotelId}}))
         } catch (err) {
             res.json(err.message)
         }
@@ -30,14 +30,14 @@ module.exports = db => {
     router.post("/", async (req, res) => {
         try {
             let newBooking = await db.booking.create({
-                date_from: req.body.dateFrom,
-                date_to: req.body.dateTo,
-                type_of_trip: req.body.typeOfTrip,
+                date_from: req.body.date_from,
+                date_to: req.body.date_to,
+                type_of_trip: req.body.type_of_trip,
                 customerId: req.user.customerId,  // todo customerId is existed into req.user?
                 hotelId: req.body.hotelId,
             });
 
-            hotelNotifyEmitter.emit('hotel.notify', {user:req.user, ...req.body})
+            hotelNotifyEmitter.emit('hotel.notify', {user: req.user, ...newBooking})
 
             //res.json('Booking has been created with success.')
             res.json(newBooking)
@@ -56,8 +56,8 @@ module.exports = db => {
                     date_from: req.body.dateFrom,
                     date_to: req.body.dateTo,
                     type_of_trip: req.body.typeOfTrip,
-                    customerId: req.body.customerId,
-                    hotelId: req.body.hotelId,
+                    // customerId: req.body.customerId,
+                    hotelId: req.user.hotelId,
                 },
                 {where: {id: req.params.bookingId}}
             );

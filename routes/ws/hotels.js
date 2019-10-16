@@ -2,7 +2,7 @@ const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 
 module.exports = io => {
 
-    hotelNotifyEmitter.on('hotel.notify',  ob =>
+    hotelNotifyEmitter.on('hotel.notify',ob =>
         io
             .of('hotels')
             .to(ob.hotelId) // room per hotel
@@ -31,9 +31,6 @@ module.exports = io => {
                 socket.emit('hey', {msg: msg, answer: true, token: socket.handshake.query.token, rooms: socket.rooms})
 
             })
+
         });
-
 }
-
-
-

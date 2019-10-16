@@ -5,7 +5,7 @@ module.exports = db => {
     // Fetch all possible Tasks
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.task.findAll())
+            res.json(await db.task.findAll({where: {hotelId: req.user.hotelId}}))
         } catch (err) {
             res.json(err.message)
         }

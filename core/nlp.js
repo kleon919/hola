@@ -13,10 +13,17 @@ manager.addDocument('en', 'thanks a lot', 'greetings.thank');
 manager.addDocument('en', 'thank you', 'greetings.thank');
 manager.addDocument('en', 'thnx', 'greetings.thank');
 
+manager.addDocument('en', 'room please', 'greetings.room');
+manager.addDocument('en', 'want a room', 'greetings.room');
+
+
 
 manager.addAnswer('en', 'greetings.bye', 'See you soon');
-manager.addAnswer('en', 'services.towel', 'Of course, in 5 minutes it wil be there');
 manager.addAnswer('en', 'greetings.thank', 'You are welcome');
+
+manager.addAnswer('en', 'greetings.room', 'BOOKING');
+manager.addAnswer('en', 'services.towel', 'TASK');
+
 
 
 module.exports = {

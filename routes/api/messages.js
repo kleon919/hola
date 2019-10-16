@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const {analyze} = require('../../core/nlp');
-let updateEmitter = require('../../core/events/customerUpdateEmitter')
+const updateEmitter = require('../../core/events/customerUpdateEmitter')
+const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
+const {random} = require("lodash");
+const faker = require("faker");
 
 module.exports = db => {
 
@@ -31,6 +34,9 @@ module.exports = db => {
             }
 
             const outcome = await analyze(req.body.content);
+
+            (outcome.answer === "BOOKING") && (async (req, db) => {createBooking(req, db); outcome.answer = 'Your booking has been counted'})(req, db);
+            (outcome.answer === "TASK") && (async (req, db) => {createTask(req, db); outcome.answer = 'Of course, in 5 minutes it wil be there'})(req, db);
 
             // todo Answer!
             let answer = outcome.answer || req.body.content + " answered";
@@ -122,5 +128,38 @@ module.exports = db => {
     });
 
     return router;
+
+}
+
+
+
+
+const createBooking = async (req, db) => {
+
+    let newBooking = await db.booking.create({
+            date_from: faker.date.recent(),
+            date_to: faker.date.future(),
+            type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
+            customerId: req.user.customerId,
+            hotelId: 1,
+        }
+    );
+
+    hotelNotifyEmitter.emit('hotel.notify', {type: 'booking', status: 'open', hotelId: 1, ...newBooking.dataValues})
+}
+
+const createTask = async (req, db) => {
+
+    let newTask = await db.task.create({
+            title: faker.lorem.word(),
+            body: faker.lorem.paragraph(),
+            close_date: faker.date.future(),
+            status: 'open',
+            staffId: null,
+            hotelId: 1
+        }
+    );
+
+    hotelNotifyEmitter.emit('hotel.notify', {type: 'task', ...newTask.dataValues})
 
 }
