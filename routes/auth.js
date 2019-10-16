@@ -27,9 +27,11 @@ const create = async (req, res, next) => {
 const fetchStaff = async account => {
 
     // todo: Validation of Input needed. Required fields
-    const person = await staff.findOne({where: {accountId: account.id}});
-    let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
-    return {person, body}
+       const person = await staff.findOne({where: {accountId: account.id}});
+       if (!person) throw new Error("User not found")
+       let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
+       return {person, body}
+
 };
 
 const fetchCustomer = async account => {
@@ -93,13 +95,17 @@ module.exports = passport => {
                 req.login(account, {session: false}, async (err) => {
                     if (err) return next(err);
 
-                    const {person, body} = (isStaff)
-                        ? await fetchStaff(account)
-                        : await fetchCustomer(account)
+                    try {
+                        const {person, body} = (isStaff)
+                            ? await fetchStaff(account)
+                            : await fetchCustomer(account)
 
-                    const token = jwt.sign(body, 'top_secret', {expiresIn: '1h'});
+                        const token = jwt.sign(body, 'top_secret', {expiresIn: '1h'});
 
-                    res.json({token, username: account.username, ...person.dataValues}) // todo
+                        res.json({token, username: account.username, ...person.dataValues}) // todo
+                    } catch (e) {
+                        return next(e) // todo: Handle it
+                    }
 
                 });
             } catch (err) {
@@ -110,6 +116,7 @@ module.exports = passport => {
 
     router.use((err, req, res, next) => {
         console.error(err.stack) // DEBUG
+        err.message === 'Unauthorized' && res.status(401).send(err.message)
         res.status(500).send(err.message || "Unknown Error")
     });
 
