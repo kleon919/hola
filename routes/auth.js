@@ -23,9 +23,8 @@ const create = async (req, res, next) => {
         next(err)
     }
 };
-
+// todo Optimize
 const fetchStaff = async account => {
-
     // todo: Validation of Input needed. Required fields
        const person = await staff.findOne({where: {accountId: account.id}});
        if (!person) throw new Error("User not found")
@@ -34,8 +33,10 @@ const fetchStaff = async account => {
 
 };
 
+// todo Optimize
 const fetchCustomer = async account => {
     const person = await customer.findOne({where: {accountId: account.id}})
+    if (!person) throw new Error("User not found")
     const discussion = await session.create({customerId: person.id});// todo: If customer create session Else proceed
     let body = {_id: account.id, customerId: person.id, sessionId: discussion.id}
     return {person, body}

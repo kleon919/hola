@@ -1,16 +1,46 @@
 const router = require("express").Router();
+const {message, booking, task} = require('../../models');
 const {analyze} = require('../../core/nlp');
-const updateEmitter = require('../../core/events/customerUpdateEmitter')
-const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
+const updateEmitter = require('../../core/events/customerUpdateEmitter');
+const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter');
 const {random} = require("lodash");
 const faker = require("faker");
 
-module.exports = db => {
+const createBooking = async req => {
+
+    let newBooking = await booking.create({
+        date_from: faker.date.recent(),
+        date_to: faker.date.future(),
+        type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
+        customerId: req.user.customerId,
+        hotelId: 1,
+    });
+
+    hotelNotifyEmitter.emit('hotel.notify', {type: 'booking', status: 'open', hotelId: 1, ...newBooking.dataValues})
+
+};
+
+const createTask = async req => {
+
+    let newTask = await task.create({
+        title: faker.lorem.word(),
+        body: faker.lorem.paragraph(),
+        close_date: faker.date.future(),
+        status: 'open',
+        staffId: null,
+        hotelId: 1
+    });
+
+    hotelNotifyEmitter.emit('hotel.notify', {type: 'task', ...newTask.dataValues})
+
+};
+
+module.exports = () => {
 
     // Fetch all Messages
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.message.findAll())
+            res.json(await message.findAll())
         } catch (err) {
             res.json(err.message)
         }
@@ -35,22 +65,29 @@ module.exports = db => {
 
             const outcome = await analyze(req.body.content);
 
-            (outcome.answer === "BOOKING") && (async (req, db) => {createBooking(req, db); outcome.answer = 'Your booking has been counted'})(req, db);
-            (outcome.answer === "TASK") && (async (req, db) => {createTask(req, db); outcome.answer = 'Of course, in 5 minutes it wil be there'})(req, db);
+            (outcome.answer === "BOOKING") && (async (req) => {
+                createBooking(req);
+                outcome.answer = 'Your booking has been counted'
+            })(req);
+            (outcome.answer === "TASK") && (async (req) => {
+                createTask(req);
+                outcome.answer = 'Of course, in 5 minutes it wil be there'
+            })(req);
 
             // todo Answer!
             let answer = outcome.answer || req.body.content + " answered";
 
             res.json(answer)
 
-            await db.message.create({
+            // todo If message creation failed, it cannot respond with res.json() again!
+            await message.create({
                 content: req.body.content,
                 actor: "client",
                 score: outcome.sentiment.score,
                 sessionId: req.user.sessionId
             });
 
-            await db.message.create({
+            await message.create({
                 content: answer,
                 actor: "hola",
                 sessionId: req.user.sessionId
@@ -64,12 +101,9 @@ module.exports = db => {
     // Fetch all Messages of a specific Session
     router.get("/session/:sessionId", async (req, res) => {
         try {
-            let message = await db.message.findAll({
+            res.json(await message.findAll({
                 where: {sessionId: req.params.sessionId}
-            })
-
-            res.json(message)
-
+            }))
         } catch (err) {
             res.json(err.message)
         }
@@ -99,9 +133,9 @@ module.exports = db => {
      */
     router.get("/customer", async (req, res) => {
         try {
-            let messages = await db.message.findAll({
+            let messages = await message.findAll({
                 include: [{
-                    model: db.session,
+                    model: session,
                     where: {customer_id: req.user.customerId}
                 }]
             });
@@ -116,11 +150,9 @@ module.exports = db => {
     // Fetch a specific Message
     router.get("/:messageId", async (req, res) => {
         try {
-            let message = await db.message.findAll({
+            res.json(await message.findAll({
                 where: {id: req.params.messageId}
-            })
-
-            res.json(message)
+            }))
 
         } catch (err) {
             res.json(err.message)
@@ -129,37 +161,4 @@ module.exports = db => {
 
     return router;
 
-}
-
-
-
-
-const createBooking = async (req, db) => {
-
-    let newBooking = await db.booking.create({
-            date_from: faker.date.recent(),
-            date_to: faker.date.future(),
-            type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
-            customerId: req.user.customerId,
-            hotelId: 1,
-        }
-    );
-
-    hotelNotifyEmitter.emit('hotel.notify', {type: 'booking', status: 'open', hotelId: 1, ...newBooking.dataValues})
-}
-
-const createTask = async (req, db) => {
-
-    let newTask = await db.task.create({
-            title: faker.lorem.word(),
-            body: faker.lorem.paragraph(),
-            close_date: faker.date.future(),
-            status: 'open',
-            staffId: null,
-            hotelId: 1
-        }
-    );
-
-    hotelNotifyEmitter.emit('hotel.notify', {type: 'task', ...newTask.dataValues})
-
-}
+};

@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const {task} = require('../../models');
 
-module.exports = db => {
+module.exports = () => {
 
     // Fetch all possible Tasks
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.task.findAll({where: {hotelId: req.user.hotelId}}))
+            res.json(await task.findAll({where: {hotelId: req.user.hotelId}}))
         } catch (err) {
             res.json(err.message)
         }
@@ -14,10 +15,7 @@ module.exports = db => {
     // Fetch a specific Task
     router.get("/:taskId", async (req, res) => {
         try {
-
-            res.json(await db.task.findAll({
-                where: {id: req.params.taskId}
-            }))
+            res.json(await task.findAll({where: {id: req.params.taskId}}))
         } catch (err) {
             res.json(err.message)
         }
@@ -26,7 +24,7 @@ module.exports = db => {
     // Fetch all Tasks of a Staff member
     router.get("/staff/:staffId", async (req, res) => {
         try {
-            res.json(await db.task.findAll({
+            res.json(await task.findAll({
                 where: {staff_id: req.params.staffId}
                 // include: [
                 //     {
@@ -39,6 +37,20 @@ module.exports = db => {
         } catch (err) {
             res.json(err.message)
         }
+    });
+
+    // Update a task's info
+    router.put('/:taskId', async () => {
+        await task.update(
+            {
+                title: req.body.title,
+                body: req.body.body,
+                close_date: req.body.close_date,
+                status: req.body.status,
+                staffId: req.body.staffId,
+            },
+            {where: {id: req.params.taskId}}
+        );
     });
 
     return router;

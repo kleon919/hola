@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const {session} = require('../../models');
 
-module.exports = db => {
+module.exports = () => {
 
     // Fetch all Sessions
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.session.findAll())
+            res.json(await session.findAll())
         } catch (err) {
             res.json(err.message)
         }
@@ -14,7 +15,7 @@ module.exports = db => {
     // Fetch all Sessions and messages of a Customer
     router.get("/customer", async (req, res) => {
         try {
-            res.json(await db.session.findAll({
+            res.json(await session.findAll({
                 include: [{
                     model: db.message,
                     attributes: ['content', 'actor', 'createdAt'],
@@ -29,7 +30,7 @@ module.exports = db => {
     // Fetch a specific Session
     router.get("/:sessionId", async (req, res) => {
         try {
-            res.json(await db.session.findAll({
+            res.json(await session.findAll({
                 where: {id: req.params.sessionId}
             }))
         } catch (err) {
@@ -40,7 +41,7 @@ module.exports = db => {
     // Create a new Session for a Customer
     router.post("/", async (req, res) => {
         try {
-            res.json(await db.session.create({
+            res.json(await session.create({
                 customerId: req.body.customerId
             }))
         } catch (err) {

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const {staff} = require('../../models');
 
 module.exports = db => {
 
@@ -7,7 +8,7 @@ module.exports = db => {
         try {
             const {_id} = req.user;
             console.log(_id)
-            res.json(await db.staff.findAll())
+            res.json(await staff.findAll())
         } catch (err) {
             res.json(err.message)
         }
@@ -16,16 +17,16 @@ module.exports = db => {
     router.get("/hotel", async (req, res) => {
         try {
 
-            let net = await db.hotel.findOne({
+            let net = await hotel.findOne({
                 include: [{
-                    model: db.staff
+                    model: staff
                     // attributes: ['']
                 }],
                 where: {id: req.user.hotelId}
             })
 
 
-            // let staff = await db.staff.findAll({
+            // let staff = await staff.findAll({
             //     where: {hotelId: req.params.hotelId}
             // })
 
@@ -39,7 +40,7 @@ module.exports = db => {
     // Fetch a specific Staff member
     router.get("/:staffId", async (req, res) => {
         try {
-            let staffMember = await db.staff.findAll({
+            let staffMember = await staff.findAll({
                 where: {id: req.params.staffId}
             })
 
@@ -53,7 +54,7 @@ module.exports = db => {
     // Create a new Staff member // todo UNUSED
     router.post("/", async (req, res) => {
         try {
-            let newStaffMember = await db.staff.create({
+            let newStaffMember = await staff.create({
                 name: req.body.name,
                 surname: req.body.surname,
                 profile_pic: req.body.profile_pic,
@@ -73,7 +74,7 @@ module.exports = db => {
     // Update an existed Staff member
     router.put("/", async (req, res) => {
         try {
-            await db.staff.update(
+            await staff.update(
                 {
                     name: req.body.name,
                     surname: req.body.surname,

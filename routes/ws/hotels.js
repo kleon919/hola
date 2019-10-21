@@ -2,7 +2,7 @@ const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter')
 
 module.exports = io => {
 
-    hotelNotifyEmitter.on('hotel.notify',ob =>
+    hotelNotifyEmitter.on('hotel.notify', ob =>
         io
             .of('hotels')
             .to(ob.hotelId) // room per hotel

@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const {customer} = require('../../models');
 
-module.exports = db => {
+module.exports = () => {
 
     // Fetch all Customers
     router.get("/", async (req, res) => {
         try {
-            res.json(await db.customer.findAll({attributes: ['id', 'name', 'surname', 'profile_pic', 'genre', 'country']}))
+            res.json(await customer.findAll({attributes: ['id', 'name', 'surname', 'profile_pic', 'genre', 'country']}))
         } catch (err) {
             res.json(err.message)
         }
@@ -14,7 +15,7 @@ module.exports = db => {
     // Fetch a specific Customer
     router.get("/:customerId", async (req, res) => {
         try {
-            let customer = await db.customer.findAll({
+            let customer = await customer.findAll({
                 // attributes: ['id', 'name', 'surname'],
                 where: {id: req.params.customerId}
             })
@@ -29,7 +30,7 @@ module.exports = db => {
     // Create a new Customer // todo UNUSED
     router.post("/", async (req, res) => {
         try {
-            let newCustomer = await db.customer.create({
+            let newCustomer = await customer.create({
                 name: req.body.name,
                 surname: req.body.surname,
                 profile_pic: req.body.profile_pic,
@@ -49,7 +50,7 @@ module.exports = db => {
     router.put("/", async (req, res) => {
         try {
 
-            await db.customer.update(
+            await customer.update(
                 {
                     name: req.body.name,
                     surname: req.body.surname,

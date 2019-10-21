@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 app.get('/schema', vizql(db.sequelize).pageRoute);
 
 app.use('/', auth(passport));
-app.use('/api', secureRoutes(db));
+app.use('/api', secureRoutes());
 
 app.use((err, req, res, next) => console.log('General ==> ' + err));
 

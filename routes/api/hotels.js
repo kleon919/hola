@@ -1,11 +1,12 @@
 const router = require('express').Router();
+const {hotel} = require('../../models');
 
-module.exports = db => {
+module.exports = () => {
 
     // Fetch all Hotels
     router.get("/", async (req, res) => {
 
-        db.hotel.findAll()
+        hotel.findAll()
             .then(hotels => res.json(hotels))
             .catch(err => res.json(err.message))
 
@@ -14,7 +15,7 @@ module.exports = db => {
     // Fetch a specific Hotel
     router.get("/:hotelId", async (req, res) => {
 
-        db.hotel.findAll({
+        hotel.findAll({
             where: {id: req.params.hotelId}
         })
             .then(hotel => res.json(hotel))
@@ -25,7 +26,7 @@ module.exports = db => {
     // Create a new Hotel
     router.post("/", async (req, res) => {
 
-        db.hotel.create({
+        hotel.create({
             name: req.body.name,
             address: req.body.address
         })
