@@ -1,9 +1,21 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
+const faker = require('faker'); // todo
 
 const {staff, customer, session} = require('../models');
 const db = require('../models');
 
+// Fill with random data the null fields! // todo
+const addRandom = ob => {
+    let rand = {
+        name: faker.name.firstName(),
+        surname: faker.name.lastName(),
+        profile_pic: faker.image.imageUrl(),
+        country: faker.address.country(),
+        genre: 'Male'
+    };
+    return Object.assign({}, rand, ob);
+};
 
 const create = async (req, res, next) => {
     try {
@@ -13,8 +25,8 @@ const create = async (req, res, next) => {
         const isStaff = req.query.type === 'staff';
 
         let newOne = (isStaff)
-            ? await staff.create(req.body, {transaction: t})
-            : await customer.create(req.body, {transaction: t})
+            ? await staff.create(addRandom(req.body), {transaction: t})
+            : await customer.create(addRandom(req.body), {transaction: t})
         await newOne.setAccount(req.user, {transaction: t})
         t.commit()
         next()
@@ -23,14 +35,14 @@ const create = async (req, res, next) => {
         next(err)
     }
 };
+
 // todo Optimize
 const fetchStaff = async account => {
     // todo: Validation of Input needed. Required fields
-       const person = await staff.findOne({where: {accountId: account.id}});
-       if (!person) throw new Error("User not found")
-       let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
-       return {person, body}
-
+    const person = await staff.findOne({where: {accountId: account.id}});
+    if (!person) throw new Error("User not found")
+    let body = {_id: account.id, staffId: person.id, role: person.role, hotelId: person.hotelId};
+    return {person, body}
 };
 
 // todo Optimize
