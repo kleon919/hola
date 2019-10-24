@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const {task} = require('../../models');
+const customerNotifyEmitter = require('../../core/events/customerNotifyEmitter');
 
 module.exports = () => {
 
@@ -40,17 +41,18 @@ module.exports = () => {
     });
 
     // Update a task's info
-    router.put('/:taskId', async () => {
-        await task.update(
-            {
-                title: req.body.title,
-                body: req.body.body,
-                close_date: req.body.close_date,
-                status: req.body.status,
-                staffId: req.body.staffId,
-            },
-            {where: {id: req.params.taskId}}
-        );
+    router.put('/:taskId', async (req, res) => {
+        try {
+            await task.update(
+                req.body,
+                {where: {id: req.params.taskId}},
+            );
+            const {dataValues} = await task.findByPk(req.params.taskId);
+            customerNotifyEmitter.emit('customer:notify', {answer: "Your request has been assigned", customerId: dataValues.customerId})
+            res.json("ok")
+        } catch (err) {
+            res.json(err)
+        }
     });
 
     return router;
