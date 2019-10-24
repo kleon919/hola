@@ -1,23 +1,22 @@
 const router = require("express").Router();
-const {staff} = require('../../models');
+const {staff, hotel} = require('../../models');
 
-module.exports = db => {
+module.exports = () => {
 
     // Fetch all Staff
     router.get("/", async (req, res) => {
         try {
-            const {_id} = req.user;
-            console.log(_id)
             res.json(await staff.findAll())
         } catch (err) {
             res.json(err.message)
         }
     });
 
+    // Fetch all Staff members of a specific Hotel
     router.get("/hotel", async (req, res) => {
         try {
 
-            let net = await hotel.findOne({
+            let hotelStaff = await hotel.findOne({
                 include: [{
                     model: staff
                     // attributes: ['']
@@ -25,12 +24,7 @@ module.exports = db => {
                 where: {id: req.user.hotelId}
             })
 
-
-            // let staff = await staff.findAll({
-            //     where: {hotelId: req.params.hotelId}
-            // })
-
-            res.json(net)
+            res.json(hotelStaff)
 
         } catch (err) {
             res.json(err.message)
@@ -79,8 +73,8 @@ module.exports = db => {
                     name: req.body.name,
                     surname: req.body.surname,
                     profile_pic: req.body.profile_pic,
-                    role: req.body.role,    // todo: Is able to get changed
-                    hotelId: req.body.hotelId,
+                    role: req.body.role,    // todo: Is it able to get changed?
+                    hotelId: req.body.hotelId,  // todo: Is it able to get changed?
                 },
                 {where: {id: req.user.staffId}}
             );
@@ -92,7 +86,6 @@ module.exports = db => {
         }
     });
 
-    // Fetch all Staff members of a specific Hotel
     return router;
 
 }

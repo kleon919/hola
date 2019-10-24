@@ -15,13 +15,7 @@ module.exports = () => {
     // Fetch a specific Customer
     router.get("/:customerId", async (req, res) => {
         try {
-            let customer = await customer.findAll({
-                // attributes: ['id', 'name', 'surname'],
-                where: {id: req.params.customerId}
-            })
-
-            res.json(customer)
-
+            res.json(await customer.findAll({where: {id: req.params.customerId}}))
         } catch (err) {
             res.json(err.message)
         }
@@ -30,17 +24,7 @@ module.exports = () => {
     // Create a new Customer // todo UNUSED
     router.post("/", async (req, res) => {
         try {
-            let newCustomer = await customer.create({
-                name: req.body.name,
-                surname: req.body.surname,
-                profile_pic: req.body.profile_pic,
-                genre: req.body.genre,
-                country: req.body.country,
-            });
-
-            //res.json('Customer has been created with success.')
-            res.json(newCustomer)
-
+            res.json(await customer.create(req.body))
         } catch (err) {
             res.json(err.message)
         }
@@ -51,14 +35,8 @@ module.exports = () => {
         try {
 
             await customer.update(
-                {
-                    name: req.body.name,
-                    surname: req.body.surname,
-                    profile_pic: req.body.profile_pic,
-                    genre: req.body.genre,
-                    country: req.body.country,
-                },
-                {where: {id: req.user.customerId}}  // Retrieve customerId from token
+                req.body,
+                {where: {id: req.user.customerId}}
             );
 
             res.json('Customer ' + req.user.customerId + ' has been updated with success.')
@@ -70,4 +48,4 @@ module.exports = () => {
 
     return router;
 
-}
+};

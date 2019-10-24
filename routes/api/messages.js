@@ -12,21 +12,23 @@ const createBooking = async req => {
         date_from: faker.date.recent(),
         date_to: faker.date.future(),
         type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
+        status: 'open',
         customerId: req.user.customerId,
         hotelId: 1,
     });
 
-    hotelNotifyEmitter.emit('hotel.notify', {type: 'booking', status: 'open', hotelId: 1, ...newBooking.dataValues})
+    hotelNotifyEmitter.emit('hotel.notify', {type: 'booking', ...newBooking.dataValues})
 
 };
 
 const createTask = async req => {
 
     let newTask = await task.create({
-        title: faker.lorem.word(),
+        title: req.body.content,
         body: faker.lorem.paragraph(),
         close_date: faker.date.future(),
         status: 'open',
+        customerId: req.user.customerId,
         staffId: null,
         hotelId: 1
     });
@@ -65,14 +67,14 @@ module.exports = () => {
 
             const outcome = await analyze(req.body.content);
 
-            (outcome.answer === "BOOKING") && (async (req) => {
-                createBooking(req);
-                outcome.answer = 'Your booking has been counted'
-            })(req);
-            (outcome.answer === "TASK") && (async (req) => {
+            if (outcome.answer === "TASK") {
                 createTask(req);
                 outcome.answer = 'Of course, in 5 minutes it wil be there'
-            })(req);
+            }
+            if (outcome.answer === "BOOKING") {
+                createBooking(req);
+                outcome.answer = 'Your booking has been counted'
+            }
 
             // todo Answer!
             let answer = outcome.answer || req.body.content + " answered";

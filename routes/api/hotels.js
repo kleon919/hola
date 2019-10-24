@@ -15,9 +15,7 @@ module.exports = () => {
     // Fetch a specific Hotel
     router.get("/:hotelId", async (req, res) => {
 
-        hotel.findAll({
-            where: {id: req.params.hotelId}
-        })
+        hotel.findAll({where: {id: req.params.hotelId}})
             .then(hotel => res.json(hotel))
             .catch(err => res.json(err))
 
@@ -37,4 +35,4 @@ module.exports = () => {
 
     return router;
 
-}
+};
