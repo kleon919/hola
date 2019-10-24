@@ -71,6 +71,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
                 date_to: faker.date.future(),
                 type_of_trip: ['work', 'holiday', 'educational'][random(0, 2)],
                 customerId: createdInstances[i].dataValues.id,
+                status: ['open', 'closed'][random(0, 1)],
                 hotelId: random(1, 5)
             }))));
 
@@ -90,8 +91,10 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
                 title: faker.lorem.word(),
                 body: faker.lorem.paragraph(),
                 close_date: faker.date.future(),
-                status: ['ON', 'OFF'][random(0, 1)],
-                hotelStaffId: createdInstances[i].dataValues.id
+                status: ['open', 'closed'][random(0, 1)],
+                staffId: createdInstances[i].dataValues.id,
+                hotelId: createdInstances[i].dataValues.hotelId,
+                customerId: random(1,5)
             })), {individualHooks: true}))
             .then(createdInstances => db.ticket.bulkCreate(times(10, (i) => ({
                 title: faker.lorem.word(),

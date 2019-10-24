@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             date_from: DataTypes.DATE,
             date_to: DataTypes.DATE,
             type_of_trip: DataTypes.STRING,
+            status: DataTypes.STRING
         },
         {
             freezeTableName: true,

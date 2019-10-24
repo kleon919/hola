@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Task.associate = (models) => {
-        Task.belongsTo(models.staff);
+        Task.belongsTo(models.customer);
+        Task.belongsTo(models.staff)
         Task.belongsTo(models.hotel)
     };
 
