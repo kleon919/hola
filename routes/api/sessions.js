@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const {session} = require('../../models');
+const {session, message} = require('../../models');
 
 module.exports = () => {
 
@@ -17,7 +17,7 @@ module.exports = () => {
         try {
             res.json(await session.findAll({
                 include: [{
-                    model: db.message,
+                    model: message,
                     attributes: ['content', 'actor', 'createdAt'],
                 }],
                 where: {customerId: req.user.customerId}
