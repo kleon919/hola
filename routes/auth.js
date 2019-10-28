@@ -94,7 +94,7 @@ module.exports = passport => {
      *
      */
     router.post('/signup', passport.authenticate('signup', {session: false}), create, async (req, res) => {
-        res.json(req.user.username + ' created')
+        res.json(req.user.username + ' created successfully')
     });
 
     router.post('/login', async (req, res, next) =>
