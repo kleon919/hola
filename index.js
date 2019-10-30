@@ -94,7 +94,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
                 status: ['open', 'closed'][random(0, 1)],
                 staffId: createdInstances[i].dataValues.id,
                 hotelId: createdInstances[i].dataValues.hotelId,
-                customerId: random(1,5)
+                sessionId: null
             })), {individualHooks: true}))
             .then(createdInstances => db.ticket.bulkCreate(times(10, (i) => ({
                 title: faker.lorem.word(),

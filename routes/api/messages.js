@@ -28,7 +28,7 @@ const createTask = async req => {
         body: faker.lorem.paragraph(),
         close_date: faker.date.future(),
         status: 'open',
-        customerId: req.user.customerId,
+        sessionId: req.user.sessionId,
         staffId: null,
         hotelId: 1
     });
@@ -69,7 +69,7 @@ module.exports = () => {
 
             if (outcome.answer === "TASK") {
                 createTask(req);
-                outcome.answer = 'Of course, in 5 minutes it wil be there'
+                outcome.answer = 'Your request is being processed'
             }
             if (outcome.answer === "BOOKING") {
                 createBooking(req);

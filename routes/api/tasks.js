@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const {task} = require('../../models');
+const {task, message, session} = require('../../models');
 const customerNotifyEmitter = require('../../core/events/customerNotifyEmitter');
 
 module.exports = () => {
@@ -47,9 +47,19 @@ module.exports = () => {
                 req.body,
                 {where: {id: req.params.taskId}},
             );
-            const {dataValues} = await task.findByPk(req.params.taskId);
-            customerNotifyEmitter.emit('customer:notify', {answer: "Your request has been assigned", customerId: dataValues.customerId})
+            const {dataValues: curTask} = await task.findByPk(req.params.taskId);
+            const {dataValues: curSession} = await session.findByPk(curTask.sessionId);
+
+            const answer =  "Your request has been assigned"
+            customerNotifyEmitter.emit('customer:notify', {answer, customerId: curSession.customerId, sessionId: curTask.sessionId})
+
             res.json("ok")
+
+            await message.create({
+                content: answer,
+                actor: "hola",
+                sessionId: curTask.sessionId
+            });
         } catch (err) {
             res.json(err)
         }
