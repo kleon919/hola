@@ -75,9 +75,12 @@ module.exports = () => {
                 createBooking(req);
                 outcome.answer = 'Your booking has been counted'
             }
+            if (outcome.intent.endsWith('.person')) {
+                outcome.answer += req.user.name
+            }
 
             // todo Answer!
-            let answer = outcome.answer || req.body.content + " answered";
+            let answer = outcome.answer || "Unfortunately my training is still very limited. But I learn a lot every day and I will be able to serve your request very soon!";
 
             res.json(answer)
 
