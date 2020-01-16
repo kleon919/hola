@@ -38,6 +38,16 @@ app.use('/api', secureRoutes());
 
 app.use((err, req, res, next) => console.log('General ==> ' + err));
 
+const p = require('./core/sagemaker/api')
+
+p([0.1, 0.3, 0.3])
+    .then(d => {
+        let x = d
+        console.log(d)
+    })
+    .catch(err => console.log(err))
+
+
 db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
     .then(() => db.sequelize.query('CREATE SCHEMA IF NOT EXISTS `hola_db`;', {raw: true}))
     .then(() => db.sequelize.query('USE `hola_db`;', {raw: true}))
