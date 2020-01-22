@@ -5,6 +5,7 @@ const updateEmitter = require('../../core/events/customerUpdateEmitter');
 const hotelNotifyEmitter = require('../../core/events/hotelNotifyEmitter');
 const {random} = require("lodash");
 const faker = require("faker");
+const {predict} = require('../../core/tf');
 
 const createBooking = async req => {
 
@@ -66,6 +67,18 @@ module.exports = () => {
             }
 
             const outcome = await analyze(req.body.content);
+
+
+            predict([0.80854, 0.64067, 0.55155])
+                .then(result => {
+
+                    console.log(result)
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
 
             if (outcome.answer === "TASK") {
                 createTask(req);

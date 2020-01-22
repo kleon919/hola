@@ -17,6 +17,7 @@ const secureRoutes = require('./routes/api');
 require('./routes/ws')(io);
 
 require('./core/nlp').init();
+require('./core/tf').init();    // todo: Refine model initialization
 
 app.use(bodyParser.urlencoded({extended: true, limit: "500mb"}));
 app.use(bodyParser.json({limit: "500mb"}));
