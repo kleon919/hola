@@ -31,6 +31,11 @@ manager.addDocument('en', 'may I have a towel please', 'services.towel');
 manager.addDocument('en', 'room please', 'services.room');
 manager.addDocument('en', 'want a room', 'services.room');
 
+manager.addDocument('en', 'hungry', 'services.food');
+manager.addDocument('en', 'eat', 'services.food');
+manager.addDocument('en', 'starving', 'services.food');
+manager.addDocument('en', 'food', 'services.food');
+
 
 manager.addAnswer('en', 'hello.person', 'Hello ');
 manager.addAnswer('en', 'morning.person', 'It is indeed a good morning ');
@@ -41,10 +46,12 @@ manager.addAnswer('en', 'greetings.thank', 'You are welcome ');
 
 manager.addAnswer('en', 'emotion.person', 'I am great, I hope you are too ');
 
-manager.addAnswer('en', 'predict.weather', 'Looks a bit cloudy, I would suggesting an umbrella ');
+manager.addAnswer('en', 'predict.weather', 'Looks a bit cloudy, I would suggest an umbrella ');
 
 manager.addAnswer('en', 'services.room', 'BOOKING');
 manager.addAnswer('en', 'services.towel', 'TASK');
+
+manager.addAnswer('en', 'services.food', 'FOOD');
 
 
 module.exports = {
