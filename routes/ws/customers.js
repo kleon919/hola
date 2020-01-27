@@ -5,7 +5,7 @@ module.exports = io => {
     customerNotifyEmitter.on('customer:notify', ob =>
         io
             .of('customers')
-            .to(ob.customerId) // todo Avoid to create a room for each customer. Try to keep them in an object using as keys their auto-generated ids from socketio
+            .to(ob.customerId) // todo: Avoid to create a room for each customer. Try to keep them in an object using as keys their auto-generated ids from socketio
             .emit('broadcast', ob));
 
     return io

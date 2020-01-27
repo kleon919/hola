@@ -58,27 +58,33 @@ module.exports = () => {
              * the event updates the matching customer's field, using the value of the attribute,
              * with the input message
              * */
-
-            if (req.body.questionKey) {
-                updateEmitter.emit('customer:update', {
-                    customerId: req.user.customerId,
-                    [req.body.questionKey]: req.body.content
-                });
-            }
+            // if (req.body.questionKey) {
+            //     updateEmitter.emit('customer:update', {
+            //         customerId: req.user.customerId,
+            //         [req.body.questionKey]: req.body.content
+            //     });
+            // }
 
             const outcome = await analyze(req.body.content);
 
+            // todo: Refactor
+            // todo: Keep logs for inputs and inference result
+            if(req.body.content.includes('vegetarian|')){
+                let age = req.user.dob;
+                let sentence = req.body.content;
 
-            predict([0.80854, 0.64067, 0.55155])
-                .then(result => {
+                let arr = sentence.split('|');
+                let preference = +arr[1];
 
-                    console.log(result)
+                let msg = arr[2]
 
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                outcome.answer = await predict([age, preference]);
+                req.body.content = msg;
+            }
 
+            if (outcome.answer === "FOOD") {
+                outcome.answer = 'Are you a vegetarian?'
+            }
 
             if (outcome.answer === "TASK") {
                 createTask(req);
@@ -88,6 +94,7 @@ module.exports = () => {
                 createBooking(req);
                 outcome.answer = 'Your booking has been counted'
             }
+
             if (outcome.intent.endsWith('.person')) {
                 outcome.answer += req.user.name
             }
