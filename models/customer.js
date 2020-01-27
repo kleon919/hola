@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: DataTypes.STRING,
             surname: DataTypes.STRING,
-            profile_pic: DataTypes.STRING, // todo
+            profile_pic: DataTypes.STRING,
+            dob: DataTypes.DATE,
             genre: DataTypes.STRING,
             country: DataTypes.STRING
         },

@@ -63,6 +63,7 @@ db.sequelize.query('DROP SCHEMA IF EXISTS `hola_db`;', {raw: true})
                 name: faker.name.firstName(),
                 surname: faker.name.lastName(),
                 profile_pic: faker.image.imageUrl(),
+                dob: faker.date.past(15),
                 genre: ['Male', 'Female'][random(0, 1)],
                 country: faker.address.country(),
                 accountId: createdInstances[i].dataValues.id

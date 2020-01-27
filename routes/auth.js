@@ -11,6 +11,7 @@ const addRandom = ob => {
         name: faker.name.firstName(),
         surname: faker.name.lastName(),
         profile_pic: faker.image.imageUrl(),
+        dob: faker.date.past(15), // todo: Needs a date that can be converted to an age in yrs
         country: faker.address.country(),
         genre: 'Male'
     };
@@ -19,7 +20,7 @@ const addRandom = ob => {
 
 const create = async (req, res, next) => {
     try {
-        // todo include the creation of the Account that performed in previous middleware into the transaction
+        // todo: Include into this transaction, the Account creation performed in a previous middleware.
         var t = await db.sequelize.transaction();
 
         const isStaff = req.query.type === 'staff';
@@ -50,7 +51,7 @@ const fetchCustomer = async account => {
     const person = await customer.findOne({where: {accountId: account.id}})
     if (!person) throw new Error("User not found")
     const discussion = await session.create({customerId: person.id});// todo: If customer create session Else proceed
-    let body = {_id: account.id, customerId: person.id, name: person.name, sessionId: discussion.id}
+    let body = {_id: account.id, customerId: person.id, name: person.name, dob:person.dob, sessionId: discussion.id}
     return {person, body}
 };
 
