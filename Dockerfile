@@ -1,7 +1,8 @@
-FROM node:10-alpine as deps
+# use node:alpine-10
+FROM node:lts as deps
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN apk add --no-cache --virtual .gyp python make g++
+# RUN apk add --no-cache --virtual .gyp python make g++
 RUN npm install --production
 
 FROM node:10-alpine as app
